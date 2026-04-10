@@ -18,6 +18,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const path_1 = require("path");
 const apps_service_1 = require("./apps.service");
+const create_app_dto_1 = require("./dto/create-app.dto");
 let AppsController = class AppsController {
     appsService;
     constructor(appsService) {
@@ -30,11 +31,13 @@ let AppsController = class AppsController {
         return this.appsService.findOne(+id);
     }
     create(file, body) {
-        const logo_url = file ? `http://localhost:3000/uploads/${file.filename}` : undefined;
+        const logo_url = file
+            ? `http://localhost:3000/uploads/${file.filename}`
+            : undefined;
         return this.appsService.create({
             name: body.name,
             description: body.description,
-            logo_url: logo_url
+            logo_url: logo_url,
         });
     }
     update(id, body) {
@@ -72,7 +75,7 @@ __decorate([
     __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, create_app_dto_1.CreateAppDto]),
     __metadata("design:returntype", void 0)
 ], AppsController.prototype, "create", null);
 __decorate([

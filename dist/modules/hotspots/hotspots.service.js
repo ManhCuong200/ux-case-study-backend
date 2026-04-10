@@ -52,9 +52,9 @@ let HotspotsService = class HotspotsService {
         return await this.hotspotRepository.save(hotspot);
     }
     async bulkCreate(hotspots) {
-        const data = hotspots.map(h => ({
+        const data = hotspots.map((h) => ({
             ...h,
-            screen: { id: h.screenId || h.screen?.id }
+            screen: { id: h.screenId },
         }));
         const entities = this.hotspotRepository.create(data);
         return await this.hotspotRepository.save(entities);

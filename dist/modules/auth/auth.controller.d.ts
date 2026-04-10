@@ -1,12 +1,13 @@
 import { AuthService } from './auth.service';
+import type { Request, Response } from 'express';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    getProfile(req: any): Promise<any>;
-    googleAuth(req: any): Promise<void>;
-    googleAuthRedirect(req: any, res: any): Promise<void>;
-    signUp(body: any): Promise<import("../users/entities/user.entity").User>;
-    signIn(body: any): Promise<{
+    getProfile(req: Request): Promise<Express.User | undefined>;
+    googleAuth(req: Request): Promise<void>;
+    googleAuthRedirect(req: Request, res: Response): Promise<void>;
+    signUp(body: Record<string, string>): Promise<import("../users/entities/user.entity").User>;
+    signIn(body: Record<string, string>): Promise<{
         user: {
             email: string;
             fullName: string;
@@ -25,7 +26,7 @@ export declare class AuthController {
     forgotPassword(email: string): Promise<{
         message: string;
     }>;
-    resetPassword(body: any): Promise<{
+    resetPassword(body: Record<string, string>): Promise<{
         message: string;
     }>;
 }

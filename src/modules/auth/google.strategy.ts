@@ -3,30 +3,41 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+interface GoogleProfile {
+  name: { givenName: string; familyName: string };
+  emails: { value: string }[];
+  photos: { value: string }[];
+}
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-    constructor(private configService: ConfigService) {
-        super({
-            clientID: configService.get<string>('GOOGLE_CLIENT_ID') || 'google_client_id',
-            clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET') || 'google_client_secret',
-            callbackURL: configService.get<string>('GOOGLE_CALLBACK_URL') || 'http://localhost:3000/auth/google/callback',
-            scope: ['email', 'profile'],
-        });
-    }
+  constructor(private configService: ConfigService) {
+    super({
+      clientID:
+        configService.get<string>('GOOGLE_CLIENT_ID') || 'google_client_id',
+      clientSecret:
+        configService.get<string>('GOOGLE_CLIENT_SECRET') ||
+        'google_client_secret',
+      callbackURL:
+        configService.get<string>('GOOGLE_CALLBACK_URL') ||
+        'http://localhost:3000/auth/google/callback',
+      scope: ['email', 'profile'],
+    });
+  }
 
-    async validate(
-        accessToken: string,
-        refreshToken: string,
-        profile: any,
-        done: VerifyCallback,
-    ): Promise<any> {
-        const { name, emails, photos } = profile;
-        const user = {
-            email: emails[0].value,
-            fullName: `${name.givenName} ${name.familyName}`,
-            picture: photos[0].value,
-            accessToken,
-        };
-        done(null, user);
-    }
+  async validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: GoogleProfile,
+    done: VerifyCallback,
+  ): Promise<void> {
+    const { name, emails, photos } = profile;
+    const user = {
+      email: emails[0].value,
+      fullName: `${name.givenName} ${name.familyName}`,
+      picture: photos[0].value,
+      accessToken,
+    };
+    done(null, user);
+  }
 }

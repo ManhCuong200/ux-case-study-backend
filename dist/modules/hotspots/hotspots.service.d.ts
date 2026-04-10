@@ -7,6 +7,6 @@ export declare class HotspotsService {
     create(createHotspotDto: CreateHotspotDto): Promise<Hotspot>;
     findAllByScreen(screenId: number): Promise<Hotspot[]>;
     remove(id: number): Promise<Hotspot>;
-    update(id: number, data: any): Promise<Hotspot>;
-    bulkCreate(hotspots: any[]): Promise<Hotspot[]>;
+    update(id: number, data: Partial<Hotspot>): Promise<Hotspot>;
+    bulkCreate(hotspots: CreateHotspotDto[]): Promise<Hotspot[]>;
 }

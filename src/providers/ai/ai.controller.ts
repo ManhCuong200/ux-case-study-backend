@@ -7,7 +7,7 @@ export class AiController {
   constructor(
     private readonly aiService: AiService,
     private readonly screensService: ScreensService,
-  ) { }
+  ) {}
 
   @Get('analyze/:screenId')
   async analyze(@Param('screenId') screenId: string) {

@@ -19,8 +19,10 @@ let GoogleStrategy = class GoogleStrategy extends (0, passport_1.PassportStrateg
     constructor(configService) {
         super({
             clientID: configService.get('GOOGLE_CLIENT_ID') || 'google_client_id',
-            clientSecret: configService.get('GOOGLE_CLIENT_SECRET') || 'google_client_secret',
-            callbackURL: configService.get('GOOGLE_CALLBACK_URL') || 'http://localhost:3000/auth/google/callback',
+            clientSecret: configService.get('GOOGLE_CLIENT_SECRET') ||
+                'google_client_secret',
+            callbackURL: configService.get('GOOGLE_CALLBACK_URL') ||
+                'http://localhost:3000/auth/google/callback',
             scope: ['email', 'profile'],
         });
         this.configService = configService;

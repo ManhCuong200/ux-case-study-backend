@@ -117,12 +117,14 @@ let AuthService = class AuthService {
     async generateTokens(payload) {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(payload, {
-                secret: this.configService.get('JWT_ACCESS_SECRET') || 'access_secret_key',
-                expiresIn: (this.configService.get('JWT_ACCESS_EXPIRES') || '15m')
+                secret: this.configService.get('JWT_ACCESS_SECRET') ||
+                    'access_secret_key',
+                expiresIn: this.configService.get('JWT_ACCESS_EXPIRES') || '15m',
             }),
             this.jwtService.signAsync(payload, {
-                secret: this.configService.get('JWT_REFRESH_SECRET') || 'refresh_secret_key',
-                expiresIn: (this.configService.get('JWT_REFRESH_EXPIRES') || '7d')
+                secret: this.configService.get('JWT_REFRESH_SECRET') ||
+                    'refresh_secret_key',
+                expiresIn: this.configService.get('JWT_REFRESH_EXPIRES') || '7d',
             }),
         ]);
         return { accessToken, refreshToken };
@@ -130,7 +132,8 @@ let AuthService = class AuthService {
     async refreshTokens(refreshToken) {
         try {
             const payload = await this.jwtService.verifyAsync(refreshToken, {
-                secret: this.configService.get('JWT_REFRESH_SECRET') || 'refresh_secret_key',
+                secret: this.configService.get('JWT_REFRESH_SECRET') ||
+                    'refresh_secret_key',
             });
             const { iat, exp, ...cleanPayload } = payload;
             return this.generateTokens(cleanPayload);
@@ -140,7 +143,7 @@ let AuthService = class AuthService {
         }
     }
     async validateUserById(userId) {
-        return this.usersService.findOneById(Number(userId));
+        return this.usersService.findOneById(userId);
     }
     async forgotPassword(email) {
         console.log('FORGOT PASSWORD REQUEST:', email);
@@ -162,7 +165,7 @@ let AuthService = class AuthService {
     async resetPassword(email, otp, pass) {
         const resetData = await this.passwordResetRepository.findOne({
             where: { email, otp, isUsed: false },
-            order: { createdAt: 'DESC' }
+            order: { createdAt: 'DESC' },
         });
         if (!resetData) {
             throw new common_1.BadRequestException('Mã OTP không hợp lệ hoặc đã qua sử dụng');

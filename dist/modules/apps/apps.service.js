@@ -34,7 +34,7 @@ let AppsService = class AppsService {
     findOne(id) {
         return this.appsRepository.findOne({
             where: { id },
-            relations: ['screens', 'screens.hotspots']
+            relations: ['screens', 'screens.hotspots'],
         });
     }
     async update(id, updateAppDto) {

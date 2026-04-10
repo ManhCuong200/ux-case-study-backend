@@ -1,40 +1,55 @@
 import {
-  Controller, Post, Get, Param, UseInterceptors, UploadedFile, Body, Patch, Delete
+  Controller,
+  Post,
+  Get,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+  Body,
+  Patch,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { ScreensService } from './screens.service';
+import { CreateScreenDto } from './dto/create-screen.dto';
 
 @Controller('screens')
 export class ScreensController {
-  constructor(private readonly screensService: ScreensService) { }
-  
+  constructor(private readonly screensService: ScreensService) {}
+
   @Get('test/health')
   healthTest() {
-    return { status: "Blueprint Command Center is Active", time: new Date() };
+    return { status: 'Blueprint Command Center is Active', time: new Date() };
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
-      },
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(
+            null,
+            `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`,
+          );
+        },
+      }),
     }),
-  }))
+  )
   async uploadScreen(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: { name: string; appId: string }
+    @Body() body: { name: string; appId: string },
   ) {
     const imageUrl = `http://localhost:3000/uploads/${file.filename}`;
 
     return this.screensService.create({
       name: body.name,
       image_url: imageUrl,
-      appId: +body.appId
+      appId: +body.appId,
     });
   }
 
@@ -49,7 +64,7 @@ export class ScreensController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() data: any) {
+  update(@Param('id') id: string, @Body() data: Partial<CreateScreenDto>) {
     return this.screensService.update(+id, data);
   }
 

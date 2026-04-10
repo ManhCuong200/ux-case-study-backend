@@ -12,24 +12,25 @@ import { JwtStrategy } from './jwt.strategy';
 import { PasswordReset } from './entities/password-reset.entity';
 
 @Module({
-    imports: [
-        // 1. Kết nối với module Users
-        UsersModule,
-        PassportModule,
-        TypeOrmModule.forFeature([PasswordReset]),
+  imports: [
+    // 1. Kết nối với module Users
+    UsersModule,
+    PassportModule,
+    TypeOrmModule.forFeature([PasswordReset]),
 
-        // 2. Cấu hình JWT
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            useFactory: async (configService: ConfigService) => ({
-                secret: configService.get<string>('JWT_ACCESS_SECRET') || 'access_secret_key',
-                signOptions: { expiresIn: '15m' },
-            }),
-            inject: [ConfigService],
-            global: true,
-        }),
+    // 2. Cấu hình JWT
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret:
+          configService.get<string>('JWT_ACCESS_SECRET') || 'access_secret_key',
+        signOptions: { expiresIn: '15m' },
+      }),
+      inject: [ConfigService],
+      global: true,
+    }),
 
-        /*
+    /*
         MailerModule.forRootAsync({
             imports: [ConfigModule],
             useFactory: async (config: ConfigService) => {
@@ -56,9 +57,9 @@ import { PasswordReset } from './entities/password-reset.entity';
             inject: [ConfigService],
         }),
         */
-],
-    controllers: [AuthController],
-    providers: [AuthService, GoogleStrategy, JwtStrategy],
-    exports: [AuthService],
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, GoogleStrategy, JwtStrategy],
+  exports: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

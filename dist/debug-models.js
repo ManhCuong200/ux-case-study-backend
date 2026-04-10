@@ -36,31 +36,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const generative_ai_1 = require("@google/generative-ai");
 const dotenv = __importStar(require("dotenv"));
 const path = __importStar(require("path"));
-dotenv.config({ path: path.join(__dirname, "..", ".env") });
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 async function listModels() {
     const apiKey = process.env.GEMINI_API_KEY?.trim();
     if (!apiKey) {
-        console.error("No GEMINI_API_KEY found in .env");
+        console.error('No GEMINI_API_KEY found in .env');
         return;
     }
     try {
         const genAI = new generative_ai_1.GoogleGenerativeAI(apiKey);
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
         const data = await response.json();
-        console.log("--- AVAILABLE MODELS BY GOOGLE AI STUDIO ---");
+        console.log('--- AVAILABLE MODELS BY GOOGLE AI STUDIO ---');
         if (data.models) {
             data.models.forEach((m) => {
-                console.log(`- ${m.name} (Methods: ${m.supportedGenerationMethods?.join(", ")})`);
+                console.log(`- ${m.name} (Methods: ${m.supportedGenerationMethods?.join(', ')})`);
             });
         }
         else {
-            console.log("No models returned. API Key might be invalid or restricted.");
-            console.log("Full response:", JSON.stringify(data, null, 2));
+            console.log('No models returned. API Key might be invalid or restricted.');
+            console.log('Full response:', JSON.stringify(data, null, 2));
         }
-        console.log("--------------------------------------------");
+        console.log('--------------------------------------------');
     }
     catch (e) {
-        console.error("Error listing models:", e.message);
+        console.error('Error listing models:', e.message);
     }
 }
 listModels();

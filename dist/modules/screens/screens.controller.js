@@ -24,14 +24,14 @@ let ScreensController = class ScreensController {
         this.screensService = screensService;
     }
     healthTest() {
-        return { status: "Blueprint Command Center is Active", time: new Date() };
+        return { status: 'Blueprint Command Center is Active', time: new Date() };
     }
     async uploadScreen(file, body) {
         const imageUrl = `http://localhost:3000/uploads/${file.filename}`;
         return this.screensService.create({
             name: body.name,
             image_url: imageUrl,
-            appId: +body.appId
+            appId: +body.appId,
         });
     }
     findByApp(appId) {

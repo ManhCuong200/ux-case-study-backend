@@ -74,7 +74,7 @@ let AiService = class AiService {
         try {
             console.log(`🔍 [AI] DYNAMICALLY DETECTING CAPABLE MODELS...`);
             const listResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-            const listData = await listResponse.json();
+            const listData = (await listResponse.json());
             if (!listData.models || listData.models.length === 0) {
                 throw new Error(`Google returned no models for this Key. Full Response: ${JSON.stringify(listData)}`);
             }
@@ -109,20 +109,25 @@ let AiService = class AiService {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            contents: [{
+                            contents: [
+                                {
                                     parts: [
                                         { text: prompt },
-                                        { inlineData: { mimeType, data: base64Data } }
-                                    ]
-                                }]
-                        })
+                                        { inlineData: { mimeType, data: base64Data } },
+                                    ],
+                                },
+                            ],
+                        }),
                     });
-                    const data = await response.json();
+                    const data = (await response.json());
                     if (!response.ok) {
                         throw new Error(data.error?.message || 'Unknown API Error');
                     }
                     let textResult = data.candidates[0].content.parts[0].text;
-                    textResult = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
+                    textResult = textResult
+                        .replace(/```json/g, '')
+                        .replace(/```/g, '')
+                        .trim();
                     const finalJson = JSON.parse(textResult);
                     console.log(`✅ [AI] DYNAMIC WINNER: ${modelId}`);
                     return finalJson;

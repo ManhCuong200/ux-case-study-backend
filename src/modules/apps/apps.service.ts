@@ -23,9 +23,9 @@ export class AppsService {
   }
 
   findOne(id: number) {
-    return this.appsRepository.findOne({ 
+    return this.appsRepository.findOne({
       where: { id },
-      relations: ['screens', 'screens.hotspots'] 
+      relations: ['screens', 'screens.hotspots'],
     });
   }
 
